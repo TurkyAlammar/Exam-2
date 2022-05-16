@@ -29,6 +29,7 @@ ALLOWED_HOSTS = [
     'exam.up.railway.app',
     'exam-tr.herokuapp.com',
     'exam-2-production.up.railway.app',
+    '5a96f53c1b53.up.railway.app',
     '127.0.0.1'
 ]
 
