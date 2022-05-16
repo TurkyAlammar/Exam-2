@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    <title>Sign Up</title>
+{% endblock %}
+
+{% block custom_css %}
+
+<style>
+
+  .display-4 {
+    font-weight: 500;
+    margin: 10px 0;
+    font-size: 40px;
+  }
+
+  .lead{
+    font-weight: 400;
+  }
+
+  .jumbotron {
+    padding: 15px; background-color: #aaa;
+  }
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="container" style="padding: 10px">
+
+        <h1 class="display-4">Examiner Sign up</h1>
+        <p class="lead">Welcome new comers</p>
+        <div class="jumbotron">
+            <div class="card card-body">
+                <form method="post">{% csrf_token %}
+                    {{ form|crispy }}
+
+                    <div style="text-align: right">
+                        <a href="{% url 'main:home' %}" style="float: left; margin-right: 5px;" class="btn btn-secondary">Back</a>
+                        <button type="submit" style="float: left" class="btn btn-success">Sign up <i class="fa fa-user-plus"></i></button>
+                        <span>OR -></span>
+                        <a class="btn btn-outline-primary" href="{% url 'users:login' %}">Login</a>
+                    </div>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+
+
+{% endblock %}

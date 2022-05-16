@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}
+    <title>Profile</title>
+{% endblock %}
+
+{% block custom_css %}
+    <link rel="stylesheet" href="{% static 'users/examiners/css/examiner_profile.css' %}">
+{% endblock %}
+
+
+{% block logout_in_navbar %}
+
+    {% include 'sign_out_button.html' %}
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+
+        <h1 class="display-4">Welcome <b>"{{ profile.user }}"</b>, in examiner dashboard</h1>
+
+        <div class="jumbotron">
+            <div class="card card-body" >
+                <table>
+                    <div class="list-group my_list">
+                    <tr>
+                      
+                        <td>
+                            <center>
+                                <a href="{% url 'main:add_exam' %}" class="list-group-item list-group-item-action list-group-item-primary item">Add Exam</a>
+                                <a href="{% url 'main:all_exams' %}" class="list-group-item list-group-item-action list-group-item-primary item">Manage Exams</a>
+                                <a href="{% url 'main:students_scores' %}" class="list-group-item list-group-item-action list-group-item-primary item">Student Scores</a>
+                            </center>
+                        </td>
+                   
+                        <td align="center">
+                            <img style="width: 450px; height: 230px;"  src="{% static 'users/examiners/img/banner.jpg' %}">
+                        </td>
+                    </tr>
+                </div>
+                </table>
+  
+                   
+            </div>
+        </div>
+
+    </div>
+
+
+{% endblock %}

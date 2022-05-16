@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+
+{% block title %}
+    <title>Add Exam</title>
+{% endblock %}
+
+
+{% block custom_css %}
+    <link rel="stylesheet" href="{% static 'main_app/css/add_exam.css' %}">
+{% endblock %}
+
+{% block logout_in_navbar %}
+
+    {% include 'sign_out_button.html' %}
+
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="container" style="padding: 10px;">
+
+        <h1 class="display-4">Add Exam</h1>
+
+        <div class="my_container">
+                <form method="post" action="{% url 'main:add_exam' %}">{% csrf_token %}
+                    {{ form|crispy }}
+                    <div>
+                        <table>
+                            <tr>
+                                <td>
+                                    <label>Select type*</label>
+                                </td>
+                                <td style="padding-left: 30px;">
+                                    <label id="durationLabel">Exam Duration (Min)*</label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <select id="exam_type" name="exam_type" style="width: 140px;" onchange="activeDuration()">
+                                        <option>Exam</option>
+                                        <option>Practice</option>
+                                    </select>
+                                </td>
+                                <td style="padding-left: 30px;"> 
+                                    <input id="exam_time" name="exam_time" type="number" style="width: 160px; height: 25px;" value="30" min="1">
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <br>
+                    <span><a href="{% url 'users:home' %}" id="backbtn" class="btn btn-secondary backBtn">Back</a></span>
+                    <button type="submit" class="btn btn-success">Add <i class="fa fa-plus"></i></button>
+                </form>
+        </div>
+    </div>
+
+    <script>
+        function activeDuration(){  
+    
+            var selected = document.getElementById("exam_type");
+            var value = selected.options[selected.selectedIndex].value;
+           if(value == "Practice"){
+                document.getElementById("exam_time").style.display = "none";
+                document.getElementById("durationLabel").style.display = "none";
+                document.getElementById("exam_time").value = 1;
+           }else{
+                document.getElementById("exam_time").style.display = "block";
+                document.getElementById("durationLabel").style.display = "block";
+                document.getElementById("exam_time").value = 30;
+           }
+        } 
+    </script>
+
+{% endblock %}
+
+

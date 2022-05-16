@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+    <title>Show Exam</title>
+{% endblock %}
+
+
+{% block custom_css %}
+    <link rel="stylesheet" href="{% static 'main_app/css/show_exam.css' %}">
+{% endblock %}
+
+
+{% block logout_in_navbar %}
+
+    {% include 'sign_out_button.html' %}
+
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="container ">
+        <div class="row">
+            <div class="col">
+
+
+
+                <div class="card card-header" style="background-color:  #05668D;">
+                        <div class="info">Exam Name : <span id="eCode">{{ exam_name }}</span></div>
+                        <div class="info">Category : <span id="eName">{{ exam_category }}</span></div>
+                        <div class="info">Test Type : <span id="eTestType">{{ exam_type }}</span></div>
+                        <div class="info">Total Number of Questions : <span id="questionsNum">{{ questions_count }}</span></div>
+                    </div>
+
+                      <div id="allQuestinos_area">
+
+                          {% for question in questions %}
+                          
+
+                          <div class="question">
+                            <div class="question_body">
+                                
+                                [Q<span>{{ forloop.counter }}</span>] <span>{{ question.body }}</span>
+                            </div>
+                            <div class="img" id="img">
+                                <center>
+                                <span><img onError="removeElement(this);" style="max-width: 800px; max-height: 300px;" class="image" id="image" src="{% static 'main_app/media/'  %}{{ question.image_file }}"></span>
+                            </center>
+                            <hr style="border: 1px solid #555;">
+                            </div>
+                            <div class="option">
+                                (<span>1</span>) <span>{{ question.op1 }}</span>
+                            </div>
+                            <div class="option">
+                                (<span>2</span>) <span>{{ question.op2 }}</span>
+                            </div>
+                            <div class="option">
+                                (<span>3</span>) <span>{{ question.op3 }}</span>
+                            </div>
+                            <div class="option">
+                                (<span>4</span>) <span>{{ question.op4 }}</span>
+                            </div>
+                            <div class="hint">
+                                 <span>hint : <b>{{ question.hint }}</b></span>
+                            </div>
+                            <div class="correct_answer">
+                               <b> --> Correct Answer Number : <span>{{ question.correct_ans }}</span></b>
+                            </div>
+                          </div>
+
+
+
+                          <!-- <div class="question">
+                            <div class="question_body">
+                                Question <span>1</span> : <span>What is SLR in bottom-up parsing ?</span>
+                            </div>
+                            <div class="option">
+                                <span>1</span> - <span>demo option x</span>
+                            </div>
+                            <div class="option">
+                                <span>2</span> - <span>demo option y</span>
+                            </div>
+                            <div class="option">
+                                <span>3</span> - <span>demo option w</span>
+                            </div>
+                            <div class="option">
+                                <span>4</span> - <span>demo option z</span>
+                            </div>
+                            <div class="correct_answer">
+                                Correct Answer Number : <span>3</span>
+                            </div>
+                        </div> -->
+
+                          {% endfor %}
+                       </div>
+
+                    <span><a href="{% url 'main:all_exams' %}"  class="btn btn-secondary" id="backBtn">&emsp;Back&emsp;</a></span>
+
+            </div>
+        </div>
+    </div>
+
+
+<script>
+    
+$(document).ready(function(){    
+    var exam_type = $("span[id='eTestType']").text()
+    if (exam_type != "Practice"){
+        $("div[class='hint']").remove()
+    }
+
+    });
+
+    function removeElement(element) {
+     element.remove();
+    }
+</script>
+
+
+    
+
+{% endblock %}
+

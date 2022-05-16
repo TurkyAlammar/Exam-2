@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+
+{% block title %}
+    <title>Edit Exam</title>
+{% endblock %}
+
+
+{% block custom_css %}
+    <link rel="stylesheet" href="{% static 'main_app/css/edit_exam.css' %}">
+{% endblock %}
+
+
+{% block logout_in_navbar %}
+
+    {% include 'sign_out_button.html' %}
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+
+            <h2 class="display-4">Edit Exam</h2>
+
+            <div class="my_container">
+
+                <form method="post" action="{% url 'main:do_edit_exam' exam_id %}">{% csrf_token %}
+                    
+                    {{ form.exam_name|as_crispy_field }}
+
+                    {{ form.category|as_crispy_field }}
+                    <div>
+                        <table>
+                            <tr>
+                                <td>
+                                    <label>Select type*</label>
+                                </td>
+                                <td style="padding-left: 30px;">
+                                    <label id="durationLabel">Exam Duration (Min)*</label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <select id="exam_type" name="exam_type" style="width: 140px;" onchange="activeDuration()">
+                                        <option>Exam</option>
+                                        <option>Practice</option>
+                                    </select>
+                                </td>
+                                <td style="padding-left: 30px;"> 
+                                    <input id="exam_time" name="exam_time" type="number" style="width: 160px; height: 25px;" value="30" min="1">
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <br>
+
+                    <span><a href="{% url 'main:all_exams' %}" id="backbtn" class="btn btn-secondary backBtn">Back</a></span>
+                    <button type="submit" class="btn btn-success">Save <i class="far fa-save"></i></button>
+
+                </form>
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function activeDuration(){  
+        var selected = document.getElementById("exam_type");
+        var value = selected.options[selected.selectedIndex].value;
+       if(value == "Practice"){
+            document.getElementById("exam_time").style.display = "none";
+            document.getElementById("durationLabel").style.display = "none";
+            document.getElementById("exam_time").value = 1;
+       }else{
+            document.getElementById("exam_time").style.display = "block";
+            document.getElementById("durationLabel").style.display = "block";
+            document.getElementById("exam_time").value = 30;
+       }
+    } 
+</script>
+{% endblock %}

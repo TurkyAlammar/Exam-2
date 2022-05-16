@@ -1,0 +1,252 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <title>Exam</title>
+{% endblock %}
+
+
+{% block custom_css %}
+    <link rel="stylesheet" href="{% static 'main_app/css/do_exam.css' %}">
+{% endblock %}
+
+
+{% block logout_in_navbar %}
+
+    {% include 'sign_out_button.html' %}
+
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="container ">
+        <div class="row">
+            <div class="col">
+
+
+
+                <div class="card card-header" style="background-color:  #05668D;">
+                    <div class="info" style="display:none">Exam ID : <span id="examID">{{ exam_id }}</span></div>
+                    <div class="info" style="display:none">Student ID : <span id="studentID">{{ std_id }}</span></div>
+
+                    <div class="info">Exam Name : <span id="examName">{{ exam_name }}</span></div>
+                    <div class="info">Category : <span id="examCategory">{{ exam_category }}</span></div>
+                    <div class="info">Test Type : <span id="eTestType">{{ exam_type }}</span></div>
+                    <div class="info">Total Number of Questions : <span id="questionsNum">{{ questions_count }}</span></div>
+                    <br>
+                    {% if exam_type == 'Exam' %}
+
+                    <center>
+                        <div style="border: 5px solid #ffffff;display:inline;padding: 5px;color: #ffffff;font-family: Verdana, sans-serif, Arial;
+                            font-size: 40px;font-weight: bold;text-decoration: none;" id="ten-countdown"></div>
+                    </center>
+                <br>
+                {% endif %}
+            </div>
+
+                <form id="submitExamForm" method="post" action="">{% csrf_token %}
+
+                  <div id="questoins_place">
+
+                    {% for question in questions %}            
+
+                        <div class="question">
+                            <div class="question_body">
+                                <span class="question_number">[Q{{ forloop.counter }}] </span>{{ question.body }}
+                            </div>
+                            
+                            <div class="img">
+                                <center>
+                                <span><img onError="removeElement(this);" style="max-width: 800px; max-height: 300px;" class="image" id="image" src="{% static 'main_app/media/'  %}{{ question.image_file }}"></span>
+                            </center>
+                            <hr style="border: 1px solid #555;">
+                            </div>
+
+                            <div class="radio option">
+                                <label><input type="radio" name="question-{{ forloop.counter }}-opts" value="1"> {{ question.op1 }}</label>
+                            </div>
+                            <div class="radio option">
+                                <label><input type="radio" name="question-{{ forloop.counter }}-opts" value="2"> {{ question.op2 }}</label>
+                            </div>
+                            <div class="radio option">
+                                <label><input type="radio" name="question-{{ forloop.counter }}-opts" value="3"> {{ question.op3 }}</label>
+                            </div>
+                            <div class="radio option">
+                                <label><input type="radio" name="question-{{ forloop.counter }}-opts" value="4"> {{ question.op4 }}</label>
+                            </div>
+                            <div class="hint">
+                                <span>hint : <b>{{ question.hint }}</b></span>
+                           </div>
+                        </div>
+
+
+                        <!-- demo question
+                            <div class="question">
+                                <div class="question_body">
+                                    <span class="question_number">1</span> - What is top-down parsing in compiler course ?
+                                </div>
+                                <div class="radio option">
+                                    <label><input type="radio" name="question-1-opts" value="1"> Option 1 demo</label>
+                                </div>
+                                <div class="radio option">
+                                    <label><input type="radio" name="question-1-opts" value="2"> Option 2 demo</label>
+                                </div>
+                                <div class="radio option">
+                                    <label><input type="radio" name="question-1-opts" value="3"> Option 3 demo</label>
+                                </div>
+                                <div class="radio option">
+                                    <label><input type="radio" name="question-1-opts" value="4"> Option 4 demo</label>
+                            </div>
+                        </div> -->
+
+                    {% endfor %}
+
+                  </div> <!-- end questions list -->
+
+                  <button id="submitButton" type="submit" class="btn btn-primary submitBtn">Submit&ensp;<i class="fa fa-check-circle"></i></button>
+                  <button type="button" onclick="exit_exam()" class="btn btn-danger exitExamBtn">Exit Exam <i class="fa fa-external-link-alt"></i></button>
+
+                </form> <!-- end form -->
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+{% endblock %}
+
+{% block custom_js %}
+    <script src="{% static 'main_app/js/do_exam.js' %}"></script>
+
+    <script>
+
+
+        $(document).ready(function(){    
+            var exam_type = $("span[id='eTestType']").text()
+            if (exam_type != "Practice"){
+                $("div[class='hint']").remove()
+            }
+
+            });
+
+
+        function countdown( elementName, minutes, seconds )
+        {
+            var element, endTime, hours, mins, msLeft, time;
+        
+            function twoDigits( n )
+            {
+                return (n <= 9 ? "0" + n : n);
+            }
+        
+            function updateTimer()
+            {
+           
+                msLeft = endTime - (+new Date);
+                if ( msLeft < 1000 ) {
+                    element.innerHTML = "Time is up!";
+                    send();
+                    
+                } else {
+                    time = new Date( msLeft );
+                    hours = time.getUTCHours();
+                    mins = time.getUTCMinutes();
+                    element.innerHTML = (hours ? hours + ':' + twoDigits( mins ) : mins) + ':' + twoDigits( time.getUTCSeconds() );
+                    setTimeout( updateTimer, time.getUTCMilliseconds() + 500 );
+                }
+            }
+        
+            element = document.getElementById( elementName );
+            endTime = (+new Date) + 1000 * (60*minutes + seconds) + 500;
+            
+            updateTimer();
+        
+        }
+        
+        countdown( "ten-countdown", {{exam_time}}, 0 );
+        
+        
+        function removeElement(element) {
+            element.remove();
+        }
+
+
+        function send(){
+            var examID = $("#examID").text();
+                    var studentID = $("#studentID").text();
+                    var questionsNumber = $('#questionsNum').text();
+                    var answers = [];
+
+                    for(var i=1; i<=questionsNumber; i++){
+                        var item = $('input[name=question-'+i+'-opts]:checked').val(); // the item can be either (1, 2, 3, or 4) indicates to the selected option
+                        if(item == undefined){
+                            answers.push("None");
+                        }else{
+                            answers.push(item);
+                        }
+              
+                    }
+             
+                    $.ajax({
+                    method: 'POST',
+                    url: '/submit_exam/',
+
+                    data: {
+                        examID: examID,
+                        stdID: studentID,
+                        answers: answers.toString(),
+
+                        // to make the Ajax request not Forbidden
+                        csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+                    },
+                    success: function(msg){
+
+                        if(msg == 1){
+                            setTimeout(() => {
+                                location.href = '/users';
+                            }, 1500);
+                        }
+                    }
+                });
+                Swal.fire({
+              title: 'OK',
+              text: 'Exam Completed successfully',
+              showConfirmButton: false,
+              timer: 1500,
+              type: 'success'
+
+          });
+        }
+
+
+   
+        
+    </script>
+
+<script>
+
+    var exam_type = $("span[id='eTestType']").text();
+    if (exam_type != "Practice"){
+
+        $("div[class='hint']").remove()
+        if(localStorage.getItem("first_time") == 0){
+        localStorage.setItem("first_time","1");
+
+        }else{
+            localStorage.setItem("first_time","0");
+            send();
+        }
+    }
+
+
+</script>   
+
+
+{% endblock %}
