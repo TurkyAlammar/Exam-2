@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'exam.up.railway.app',
+    'exam-tr.herokuapp.com',
     '127.0.0.1'
 ]
 
